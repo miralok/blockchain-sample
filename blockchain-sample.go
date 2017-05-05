@@ -118,16 +118,17 @@ func (cc *BlockchainSampleChaincode) Query(stub shim.ChaincodeStubInterface, fun
 		return formatOutput(bs)
 	}else
 	if function == "getAllBlockchainSampleByAge" {
-		var bs BlockchainSample
+		var bsArr []BlockchainSample
 
-		bs, err = getAllBlockchainSampleByAge(stub, args)
+		bsArr, err = getAllBlockchainSampleByAge(stub, args)
 
 		if err != nil {
-			bs.ErrMsg = err.Error()
-			return formatOutput(bs)
+			return nil, err
 		}
 
-		return formatOutput(bs)
+		//jsonObj, err := json.Marshal(icArr)
+
+		return formatOutput(bsArr)
 	}
 	
 	return nil, errors.New("Unknown function " + function + ".")

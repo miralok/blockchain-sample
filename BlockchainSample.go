@@ -5,9 +5,9 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	//"strings"
 	//"strconv"
-	"fmt"
+
 	"strconv"
-	"strings"
+
 )
 
 const (
@@ -89,7 +89,6 @@ func (bs BlockchainSample)generateKeyArray(num int8)([]shim.Column) {
 	switch(num){
 	case 0:	return []shim.Column{}
 	case 1:	col = shim.Column{Value: &shim.Column_String_{String_: bs.Name}}
-	case 2:	col = shim.Column{Value: &shim.Column_String_{String_: bs.Age}}
 	}
 
 	return append(bs.generateKeyArray(num-1), col)
@@ -154,7 +153,7 @@ func insertBlockchainSample(stub shim.ChaincodeStubInterface, args []string) (Bl
 	age, _ := strconv.Atoi(args[1])
 
 	bs.Name = name
-	bs.Age = age
+	bs.Age = int32(age)
 
 	err := bs.insert()
 	if err != nil {
@@ -185,7 +184,7 @@ func increaseAge(stub shim.ChaincodeStubInterface, args []string) (bsRet Blockch
 		return bs, err
 	}
 
-	bs.Age = bs.Age + ageIncrease
+	bs.Age = bs.Age + int32(ageIncrease)
 
 	err = bs.replace()
 	if err != nil {
@@ -255,7 +254,7 @@ func getAllBlockchainSampleByAge(stub shim.ChaincodeStubInterface, args []string
 
 	age, _ := strconv.Atoi(args[1])
 
-	bs.Age = age
+	bs.Age = int32(age)
 	bsArr, err = bs.getAllByAge()
 
 	return bsArr, err
